@@ -38,11 +38,11 @@ class Schedule:
         days = [self.week + timedelta(days=x) for x in range(7)]
         times = [
             self.parse_times(line)
-            for line in self.text
+            for line in self.text.split('\n')
             if line.strip().startswith(DAY_PREFIXES)
         ]
         if len(times) != 7:
-            self.error = 'Did not find 7 days of schedules.'
+            self.error = f'Did not find 7 days of schedules. Found: {times}'
 
         self.days = [
             ScheduleDay(day, begin, end)
