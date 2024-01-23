@@ -9,6 +9,7 @@ from otr import read_image_text
 from schedule import Schedule
 from ui import ScheduleView
 
+token = os.getenv('DISCORD_TOKEN')
 intents = discord.Intents.default()
 intents.message_content = True
 
@@ -43,6 +44,14 @@ async def read_schedule(context: commands.Context):
         text = read_image_text(image)
         bot.last_texts.append(text)
         schedule = Schedule(text)
-        await context.send(str(schedule), view=ScheduleView() if schedule.error is None else None)
+        if schedule.error is not None:
+            await context.send(schedule.error)
+            return # Nothing to do if the schedule didn't parse correctly.
 
-bot.run(os.getenv('DISCORD_TOKEN'))
+        if context.guild is None:
+            await context.send(str(schedule))
+            return # Don't offer to create events outside of a guild.
+
+        await context.send(str(schedule), view=ScheduleView(schedule))
+
+bot.run(token)
