@@ -15,9 +15,9 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 bot.last_texts = []
 
 @bot.command()
-async def echo(context: commands.Context, arg):
+async def echo(context: commands.Context, *, message:str):
     """Echoes back argument to Discord message"""
-    await context.send(arg)
+    await context.send(message)
 
 @bot.command()
 async def debug(context: commands.Context):

@@ -81,3 +81,14 @@ class TestSchedule(unittest.TestCase):
         """Tests for correct failure for not having 7 days"""
         schedule = Schedule(MISSING_DAYS)
         self.assertRegex(schedule.error, 'Did not find 7 days of schedules. Found:.*')
+
+    def test_day_parsing(self):
+        """Tests to make sure schedule days are parsed correctly.
+        This includes formats like: Not Scheduled, 10a.m. and 3:45p.m."""
+        sat = self.schedule.days[0]
+        self.assertIsNone(sat.begin)
+        self.assertIsNone(sat.end)
+
+        mon = self.schedule.days[1]
+        self.assertEqual(datetime(2024, 1, 21, 10, 0), mon.begin)
+        self.assertEqual(datetime(2024, 1, 21, 15, 45), mon.end)

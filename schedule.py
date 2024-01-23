@@ -45,12 +45,14 @@ class Schedule:
             self.error = f'Did not find 7 days of schedules. Found: {times}'
 
         self.days = [
-            ScheduleDay(day, begin, end)
+            ScheduleDay(day,
+                        datetime.combine(day.date(), begin.time()) if begin is not None else None,
+                        datetime.combine(day.date(), end.time()) if end is not None else None)
             for day, (begin, end)
             in zip(days, times)
         ]
 
-    def parse_times(self, line: str):
+    def parse_times(self, line: str) -> tuple[datetime, datetime]:
         """Parses beginning and end schedule times from a single line of Schedule text."""
         if 'Not Scheduled' in line:
             return None, None
@@ -79,11 +81,11 @@ class Schedule:
 
         s = f'Week: {self.week:%m/%d/%Y}\n'
         for day in self.days:
-            s += f'{day.day:%m/%d/%Y}: '
+            s += f'{day.day:%a %m/%d}: '
             if day.begin is None:
                 s += 'Not Scheduled\n'
                 continue
-            s += f'{day.begin} - {day.end}\n'
+            s += f'{day.begin:%I:%M %p} - {day.end:%I:%M %p}\n'
         return s
 
 @dataclass
