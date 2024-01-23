@@ -7,6 +7,7 @@ from discord.ext import commands
 from api import download_image
 from otr import read_image_text
 from schedule import Schedule
+from ui import ScheduleView
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -42,6 +43,6 @@ async def read_schedule(context: commands.Context):
         text = read_image_text(image)
         bot.last_texts.append(text)
         schedule = Schedule(text)
-        await context.send(str(schedule))
+        await context.send(str(schedule), view=ScheduleView() if schedule.error is None else None)
 
 bot.run(os.getenv('DISCORD_TOKEN'))
