@@ -44,10 +44,12 @@ class Schedule:
         if len(times) != 7:
             self.error = f'Did not find 7 days of schedules. Found: {times}'
 
+        tzinfo = datetime.now().astimezone().tzinfo
         self.days = [
             ScheduleDay(day,
-                        datetime.combine(day.date(), begin.time()) if begin is not None else None,
-                        datetime.combine(day.date(), end.time()) if end is not None else None)
+                        datetime.combine(day.date(), begin.time(), tzinfo),
+                        datetime.combine(day.date(), end.time(), tzinfo)) \
+            if begin is not None else ScheduleDay(day)
             for day, (begin, end)
             in zip(days, times)
         ]

@@ -12,6 +12,7 @@ from ui import ScheduleView
 token = os.getenv('DISCORD_TOKEN')
 intents = discord.Intents.default()
 intents.message_content = True
+intents.guild_scheduled_events = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 bot.last_texts = []

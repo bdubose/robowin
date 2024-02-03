@@ -16,6 +16,5 @@ class ScheduleView(View):
     @button(label="Add to Discord Calendar", style=ButtonStyle.primary, emoji="📅")
     async def add_to_calendar(self, interaction: Interaction, _: Button):
         """Allows user to add this schedule to the guild calendar."""
-        await interaction.response.send_message('Adding events...', ephemeral=True)
         await create_schedule_events(self.schedule, interaction.user, interaction.guild_id)
         await interaction.response.send_message('Added events.')
