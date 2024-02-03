@@ -32,15 +32,15 @@ async def debug(context: commands.Context):
 async def read_schedule(context: commands.Context):
     """Reads image attachments into Schedules."""
     bot.last_texts = []
-    image_urls = context.message.attachments
-    count = len(image_urls)
+    image_attachments = context.message.attachments
+    count = len(image_attachments)
     if count == 0:
         await context.send('No images found 😔')
         return
 
     await context.send(f'Processing {count} image{"" if count == 1 else "s"}...')
-    for image_url in image_urls:
-        image = download_image(image_url)
+    for image_attachment in image_attachments:
+        image = await download_image(image_attachment.url)
         text = read_image_text(image)
         bot.last_texts.append(text)
         schedule = Schedule(text)

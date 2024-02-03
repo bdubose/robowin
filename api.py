@@ -1,11 +1,10 @@
 """Functions for interacting with the web."""
 
 from io import BytesIO
-import requests
+import aiohttp
 from PIL import Image
 
-
-def download_image(url: str) -> Image:
+async def download_image(url: str) -> Image:
     """Fetches image from provided url"""
-    response = requests.get(url, timeout=15)
-    return Image.open(BytesIO(response.content))
+    async with aiohttp.request('GET', url) as response:
+        return Image.open(BytesIO(await response.read()))
